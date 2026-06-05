@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Happy Birthday Nidhi</title>
+  <style>
+    body { text-align:center; font-family:'Trebuchet MS',sans-serif; margin:0; overflow-x:hidden; }
+    .hidden { display:none; }
+    h1 { color:purple; }
+
+    /* Button styling */
+    button {
+      padding:12px 25px;
+      background:#6a0dad;
+      color:white;
+      border:none;
+      border-radius:8px;
+      cursor:pointer;
+      font-size:20px;
+      box-shadow:0 0 10px rgba(0,0,0,0.3);
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+    button:hover {
+      transform: scale(1.1);
+      box-shadow: 0 0 20px #ff69b4, 0 0 40px #ff1493;
+    }
+
+    /* Video backgrounds */
+    .page { position:relative; height:100vh; overflow:hidden; }
+    .page video { position:absolute; top:0; left:0; width:100%; height:100%; object-fit:cover; z-index:-1; }
+
+    .welcome-text { font-size:70px; color:#fff; text-shadow:2px 2px 15px #000; margin-top:150px; animation:glow 2s infinite alternate; }
+    .sub-text { font-size:28px; color:#fff; margin-bottom:30px; text-shadow:1px 1px 5px #000; }
+    @keyframes glow { from{text-shadow:0 0 10px #ff69b4;} to{text-shadow:0 0 25px #ff1493;} }
+
+    /* Countdown styling */
+    #countdown { font-size:120px; color:#ff0000; font-weight:bold; text-align:center; margin-top:150px; text-shadow:0 0 20px #ff69b4,0 0 40px #ff1493; }
+
+    /* Gallery */
+    .gallery img { width:180px; margin:10px; border-radius:15px; transition:transform 0.3s; box-shadow:0 0 15px rgba(0,0,0,0.3); }
+    .gallery img:hover { transform:scale(1.1); }
+
+    /* Fireworks */
+    #fireworksCanvas { position:fixed; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:999; }
+
+    /* Age counter with glowing border */
+    #ageCounter {
+      position: fixed;
+      bottom: 10px;
+      right: 15px;
+      font-size: 22px;
+      color: #222;
+      background: rgba(255,255,255,0.9);
+      padding: 8px 12px;
+      border-radius: 10px;
+      border: 2px solid #ff69b4;
+      box-shadow: 0 0 15px #ff69b4, 0 0 30px #ff1493;
+      animation: borderGlow 2s infinite alternate;
+    }
+    @keyframes borderGlow {
+      from { box-shadow: 0 0 10px #ff69b4, 0 0 20px #ff1493; }
+      to { box-shadow: 0 0 20px #ff1493, 0 0 40px #ff69b4; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Page 1 -->
+  <div id="page1" class="page">
+    <video autoplay muted loop playsinline>
+      <source src="vedio1.mp4" type="video/mp4">
+    </video>
+    <h1 class="welcome-text">🌸 Welcome Nidhi 🌸</h1>
+    <p class="sub-text">I am here to wish you</p>
+    <button onclick="goToPage2()">OK</button>
+  </div>
+
+  <!-- Page 2 -->
+  <div id="page2" class="hidden">
+    <h1>Countdown to Surprise 🎁</h1>
+    <div id="countdown">10</div>
+    <audio id="timerSong" src="timer.mp3"></audio>
+  </div>
+
+  <!-- Page 3 -->
+  <div id="page3" class="page hidden">
+    <video autoplay muted loop playsinline>
+      <source src="vedio2.mp4" type="video/mp4">
+    </video>
+    <h1 style="color:white; text-shadow:2px 2px 10px #000;">💖 Happy Birthday Nidhi 💖</h1>
+    <p style="color:white; text-shadow:1px 1px 5px #000;">You are my childhood friend, my forever bestie. May your day be filled with joy!</p>
+    <div class="gallery">
+      <img src="photo1.png" alt="Memory 1">
+      <img src="photo2.png" alt="Memory 2">
+      <img src="photo3.png" alt="Memory 3">
+      <img src="photo4.png" alt="Memory 4">
+      <img src="photo5.png" alt="Memory 5">
+    </div>
+    <p style="color:white; text-shadow:1px 1px 5px #000;"><i>“Childhood friends are treasures of the heart,<br>They make our lives brighter from the very start.”</i></p>
+    <audio id="birthdaySong" src="birthday.mp3" loop></audio>
+  </div>
+
+  <!-- Page 4 -->
+  <div id="page4" class="page hidden">
+    <video autoplay muted loop playsinline>
+      <source src="vedio2.mp4" type="video/mp4">
+    </video>
+    <h1 style="color:white; text-shadow:2px 2px 10px #000;">A Poem for You 🌸</h1>
+    <p style="color:white; text-shadow:1px 1px 5px #000;">
+      From playground laughs to secrets we share,<br>
+      Through every season, I’ll always care.<br>
+      Childhood gave me the gift of you,<br>
+      A friend so loyal, forever true.<br><br>
+      — Your friend, Aniruddha
+    </p>
+    <div id="ageCounter">🎂 Current Age: 19 years</div>
+  </div>
+
+  <canvas id="fireworksCanvas" class="hidden"></canvas>
+
+  <script>
+    function goToPage2() {
+      document.getElementById("page1").classList.add("hidden");
+      document.getElementById("page2").classList.remove("hidden");
+      const audio = document.getElementById("timerSong");
+      audio.play();
+      setTimeout(startCountdown, 1000);
+    }
+
+    function startCountdown() {
+      let count = 10;
+      let timer = setInterval(function() {
+        document.getElementById("countdown").innerHTML = count;
+        count--;
+        if(count < 0) {
+          clearInterval(timer);
+          document.getElementById("timerSong").pause();
+          launchFireworks();
+          setTimeout(() => {
+            document.getElementById("page2").classList.add("hidden");
+            document.getElementById("page3").classList.remove("hidden");
+            document.getElementById("birthdaySong").play();
+          }, 4000);
+        }
+      }, 1000);
+    }
+
+    function launchFireworks() {
+      const canvas = document.getElementById("fireworksCanvas");
+      const ctx = canvas.getContext("2d");
+      canvas.classList.remove("hidden");
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+
+      let particles = [];
+      for(let i=0; i<100; i++) {
+        particles.push({
+          x: canvas.width/2,
+          y: canvas.height/2,
+          vx: (Math.random()-0.5)*10,
+          vy: (Math.random()-0.5)*10,
+          life: 100
+        });
+      }
+
+      function animate() {
+        ctx.clearRect(0,0,canvas.width,canvas.height);
+        particles.forEach(p => {
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, 3, 0, Math.PI*2);
+          ctx.fillStyle = "hsl(" + Math.random()*360 + ",100%,50%)";
+          ctx.fill();
+          p.x += p.vx;
+          p.y += p.vy;
+          p.vy += 0.05;
+          p.life--;
+        });
+        particles = particles.filter(p => p.life>0);
+        if(particles.length>0) {
+          requestAnimationFrame(animate);
+        } else {
+          canvas.classList.add("hidden");
+          document.getElementById("page4").classList.remove("hidden");
+        }
+      }
+      animate();
+    }
+  </script>
+
+</body>
+</html>
